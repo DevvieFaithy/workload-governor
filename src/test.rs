@@ -136,6 +136,26 @@ fn unit_ttl_constant_in_range() {
 }
 
 #[test]
+fn unit_application_ttl_config_defaults_and_admin_override() {
+    let t = TestEnv::new();
+    let admin = Address::generate(&t.env);
+
+    t.client.initialize(&admin);
+    assert_eq!(
+        t.client.get_app_ttl_threshold_ledgers(),
+        crate::storage::APP_TTL_LEDGERS
+    );
+    assert_eq!(
+        t.client.get_app_ttl_extend_to_ledgers(),
+        crate::storage::APP_TTL_LEDGERS
+    );
+
+    t.client.set_application_ttl_config(&100u32, &500u32);
+    assert_eq!(t.client.get_app_ttl_threshold_ledgers(), 100u32);
+    assert_eq!(t.client.get_app_ttl_extend_to_ledgers(), 500u32);
+}
+
+#[test]
 fn unit_saturating_sub_zero_floor_global() {
     let t = TestEnv::new();
     let admin = Address::generate(&t.env);

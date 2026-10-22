@@ -46,4 +46,8 @@ pub enum ContractError {
     /// The provided expected_nonce does not match the current on-chain admin nonce.
     /// This indicates a stale or replayed authorisation attempt.
     StaleAdminNonce               = 20,
+
+    // #1007 — Application TTL configuration
+    /// Application TTL values must be nonzero, within the platform cap, and threshold <= target.
+    InvalidApplicationTtl         = 21,
 }
