@@ -327,7 +327,6 @@ fn unit_error_assignment_not_found_complete() {
 }
 
 #[test]
-#[should_panic]
 fn unit_error_assignment_not_found_revoke() {
     let t = TestEnv::new();
     let admin = Address::generate(&t.env);
@@ -337,7 +336,14 @@ fn unit_error_assignment_not_found_revoke() {
 
     t.client.initialize(&admin);
     t.client.register_maintainer(&admin, &maintainer, &org);
-    t.client.revoke_assignment(&maintainer, &contributor, &org, &99u32); // AssignmentNotFound
+
+    let result = t.client.try_revoke_assignment(&maintainer, &contributor, &org, &99u32);
+    assert_eq!(
+        result,
+        Err(soroban_sdk::Error::from_contract_error(
+            crate::errors::ContractError::AssignmentNotFound as u32
+        ))
+    );
 }
 
 #[test]
